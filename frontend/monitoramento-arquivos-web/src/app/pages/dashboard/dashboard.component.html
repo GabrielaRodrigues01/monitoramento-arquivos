@@ -1,0 +1,36 @@
+<section class="page">
+  <h1>Dashboard</h1>
+  <p class="subtitle">Visão geral do processamento de arquivos</p>
+
+  <div *ngIf="loading" class="state">Carregando...</div>
+  <div *ngIf="error" class="state error">{{ error }}</div>
+
+  <ng-container *ngIf="!loading && summary">
+    <div class="cards">
+      <div class="card">
+        <div class="kpi">Recepcionados</div>
+        <div class="value">{{ summary.receivedCount }}</div>
+      </div>
+
+      <div class="card">
+        <div class="kpi">Não Recepcionados</div>
+        <div class="value">{{ summary.notReceivedCount }}</div>
+      </div>
+
+      <div class="card">
+        <div class="kpi">Total</div>
+        <div class="value">{{ summary.totalCount }}</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Comparativo</h2>
+      <canvas
+        baseChart
+        [data]="barChartData"
+        [options]="barChartOptions"
+        [type]="'bar'">
+      </canvas>
+    </div>
+  </ng-container>
+</section>

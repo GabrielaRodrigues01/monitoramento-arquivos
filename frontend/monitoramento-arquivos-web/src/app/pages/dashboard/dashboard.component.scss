@@ -1,0 +1,99 @@
+.page {
+  h1 {
+    margin: 0;
+  }
+
+  .subtitle {
+    margin: 6px 0 18px;
+    color: #6b7280;
+  }
+}
+
+.state {
+  padding: 14px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+
+  &.error {
+    border-left: 6px solid #ef4444;
+  }
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.07);
+  border: 1px solid rgba(91, 44, 131, 0.1);
+
+  border-left: 6px solid rgba(91, 44, 131, 0.35);
+
+  .kpi {
+    color: #6b7280;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+
+  .value {
+    font-size: 34px;
+    font-weight: 900;
+    margin-top: 6px;
+    color: #111827;
+  }
+}
+
+.card--ok {
+  border-left-color: rgba(34, 197, 94, 0.75);
+
+  .value {
+    color: #16a34a;
+  }
+}
+
+.card--error {
+  border-left-color: rgba(244, 63, 94, 0.75);
+
+  .value {
+    color: #e11d48;
+  }
+}
+
+.card--total {
+  border-left-color: rgba(91, 44, 131, 0.75);
+
+  .value {
+    color: #5b2c83;
+  }
+}
+
+.panel {
+  background: #faf7fd;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+
+  border: 1px solid rgba(91, 44, 131, 0.18);
+
+  h2 {
+    margin: 0 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid rgba(91, 44, 131, 0.25);
+    color: #5b2c83;
+    font-weight: 800;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}

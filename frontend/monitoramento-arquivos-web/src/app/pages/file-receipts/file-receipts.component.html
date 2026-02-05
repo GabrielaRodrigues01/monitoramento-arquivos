@@ -1,0 +1,65 @@
+<section class="page">
+  <h1>Arquivos</h1>
+  <p class="subtitle">Listagem dos arquivos processados (via API)</p>
+
+  <div *ngIf="loading" class="state">Carregando...</div>
+  <div *ngIf="error" class="state error">{{ error }}</div>
+
+  <ng-container *ngIf="!loading && !error">
+    <div class="panel">
+      <div class="table-wrap" *ngIf="items.length > 0; else empty">
+        <table class="table">
+          <!-- ✅ controla largura das colunas -->
+          <colgroup>
+            <col style="width: 240px" />
+            <col style="width: 170px" />
+            <col style="width: 170px" />
+            <col style="width: 150px" />
+            <col style="width: 110px" />
+            <col style="width: auto" />
+          </colgroup>
+
+          <thead>
+            <tr>
+              <th>Arquivo</th>
+              <th>Status</th>
+              <th>Recebido em</th>
+              <th>Estabelecimento</th>
+              <th>Sequência</th>
+              <th>Erro</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of items; trackBy: trackByFile">
+              <td class="mono">{{ r.fileName }}</td>
+
+              <td>
+                <span [class]="statusClass(r.status)">
+                  {{ statusLabel(r.status) }}
+                </span>
+              </td>
+
+              <td class="mono">{{ r.receivedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              <td class="mono">{{ r.establishment || '-' }}</td>
+              <td class="mono">{{ r.sequence }}</td>
+
+              <!-- ✅ tooltip nativo: mostra texto completo no hover -->
+              <td
+                class="error-cell"
+                [attr.title]="r.errorMessage || null"
+                [attr.data-has-error]="r.errorMessage ? '1' : null"
+              >
+                {{ r.errorMessage || '-' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #empty>
+        <div class="state">Nenhum arquivo encontrado.</div>
+      </ng-template>
+    </div>
+  </ng-container>
+</section>

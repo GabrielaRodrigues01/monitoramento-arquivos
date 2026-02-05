@@ -1,0 +1,36 @@
+<div class="app">
+  <aside class="sidebar" aria-label="Menu lateral">
+    <a class="brand" [routerLink]="['/dashboard']">
+      <img src="/linx-logo.png" alt="Linx" class="logo" />
+      <div class="brand__subtitle">MONITORAMENTO DE ARQUIVOS</div>
+    </a>
+
+    <nav class="menu">
+      <button
+        type="button"
+        class="menu__item"
+        [routerLink]="['/dashboard']"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Dashboard
+      </button>
+
+      <button
+        type="button"
+        class="menu__item"
+        [routerLink]="['/arquivos']"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Arquivos
+      </button>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="content__container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
