@@ -1,59 +1,237 @@
-# LinxMonitoramentoArquivos
+# Linx Monitoramento de Arquivos Front-end
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.2.
+Aplicação front-end desenvolvida em Angular para o monitoramento de arquivos processados, exibindo status, listagem e dashboard com gráficos. O consumo de dados é feito exclusivamente via API REST.
 
-## Development server
+## Tecnologias Utilizadas
 
-To start a local development server, run:
+1. Angular com standalone components  
+2. TypeScript  
+3. SCSS  
+4. Angular Router  
+5. HttpClient  
+6. Chart.js com ng2-charts  
+7. API REST desenvolvida em .NET  
 
-```bash
-ng serve
-```
+## Como iniciar o projeto localmente
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Pré-requisitos
 
-## Code scaffolding
+1. Node.js versão 18 ou superior  
+2. NPM versão 9 ou superior  
+3. Angular CLI instalado globalmente  
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Instalação do Angular CLI:
 
 ```bash
-ng build
+npm install -g @angular/cli
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Instalação das dependências
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Na raiz do projeto, execute:
 
 ```bash
-ng test
+npm install
 ```
 
-## Running end-to-end tests
+### Subir o backend
 
-For end-to-end (e2e) testing, run:
+A API deve estar rodando localmente. Exemplo:
+
+```
+http://localhost:5270
+```
+
+O front-end utiliza proxy para evitar problemas de CORS.
+
+### Iniciar o front-end
 
 ```bash
-ng e2e
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+A aplicação ficará disponível em:
 
-## Additional Resources
+```
+http://localhost:4200
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Proxy de API
+
+Arquivo de configuração:
+
+```
+proxy.conf.json
+```
+
+Configuração:
+
+```json
+{
+  "/api": {
+    "target": "http://localhost:5270",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
+```
+
+Todas as chamadas HTTP utilizam o prefixo `/api`.
+
+## Estrutura de Pastas
+
+```
+src/
+├── app/
+│   ├── core/
+│   │   ├── api/
+│   │   │   ├── api.config.ts
+│   │   │   └── api.service.ts
+│   │   └── models/
+│   │       ├── file-receipt.model.ts
+│   │       └── dashboard-summary.model.ts
+│   │
+│   ├── layout/
+│   │   └── shell/
+│   │       ├── shell.component.ts
+│   │       ├── shell.component.html
+│   │       └── shell.component.scss
+│   │
+│   ├── pages/
+│   │   ├── dashboard/
+│   │   │   ├── dashboard.component.ts
+│   │   │   ├── dashboard.component.html
+│   │   │   └── dashboard.component.scss
+│   │   │
+│   │   └── file-receipts/
+│   │       ├── file-receipts.component.ts
+│   │       ├── file-receipts.component.html
+│   │       └── file-receipts.component.scss
+│   │
+│   ├── app.routes.ts
+│   └── app.config.ts
+│
+├── assets/
+│   └── linx-logo.png
+│
+├── styles.scss
+└── main.ts
+```
+
+## Descrição das Pastas
+
+### core
+
+Camada central da aplicação, sem dependência de interface visual.
+
+#### core/api
+
+Responsável pela comunicação com a API.
+
+Arquivo api.config.ts  
+Define configurações base como baseUrl.
+
+Arquivo api.service.ts  
+Centraliza todas as chamadas HTTP da aplicação.
+
+Regra adotada: nenhum componente utiliza HttpClient diretamente.
+
+#### core/models
+
+Modelos TypeScript que representam os contratos da API.
+
+Exemplos:
+
+FileReceipt  
+DashboardSummary  
+
+### layout
+
+Componentes estruturais da aplicação.
+
+#### layout/shell
+
+Layout principal da aplicação, composto por cabeçalho e navegação.
+
+Contém:
+
+Logo Linx  
+Menu de navegação  
+router-outlet  
+
+Funciona como o frame da aplicação.
+
+### pages
+
+Páginas reais da aplicação, associadas às rotas.
+
+#### pages/dashboard
+
+Dashboard inicial com:
+
+Resumo de arquivos recepcionados e não recepcionados  
+Gráficos utilizando Chart.js  
+
+#### pages/file-receipts
+
+Listagem de arquivos processados contendo:
+
+Nome do arquivo  
+Status  
+Datas  
+Mensagem de erro quando aplicável  
+
+### assets
+
+Arquivos estáticos públicos.
+
+Imagens  
+Ícones  
+Logos  
+
+Todo o conteúdo é acessível via `/assets`.
+
+## Rotas da Aplicação
+
+Arquivo:
+
+```
+app.routes.ts
+```
+
+Configuração:
+
+```ts
+export const routes: Routes = [
+  {
+    path: '',
+    component: ShellComponent,
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'arquivos', component: FileReceiptsComponent }
+    ]
+  }
+];
+```
+
+## Fluxo de Navegação
+
+1. Acessa a rota raiz  
+2. Redirecionamento automático para dashboard  
+3. Navegação ocorre sem reload da página  
+4. Dados são sempre obtidos via API  
+
+## Comunicação com a API
+
+Exemplo de chamada no ApiService:
+
+```ts
+getFileReceipts() {
+  return this.http.get<FileReceipt[]>('/api/FileReceipts');
+}
+```
+
+Todas as chamadas passam pelo proxy configurado.
+
+Nenhuma lógica de negócio é implementada no front-end.
