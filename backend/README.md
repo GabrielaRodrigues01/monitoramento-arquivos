@@ -274,6 +274,7 @@ GET /api/Dashboard/summary
   └────────┬───────────────────┘
      ├── Sucesso ──▶ storage/backup
      └── Falha   ──▶ storage/rejected
+  ```
 
 
 
