@@ -225,14 +225,71 @@ Teste 1 – Fagammon válido
   - Nenhum novo registro duplicado inserido
  
   ## Endpoints Principais
-  Listagem de arquivos:
-  ```bash
-  GET /api/FileReceipts
-
+Listagem de arquivos:
+```bash
+GET /api/FileReceipts
+```
 Dashboard:
-  ```bash
-  GET /api/Dashboard/summary
+```bash
+GET /api/Dashboard/summary
+```
+- Observações Importantes:
+  - Erro de DLL em uso durante build indica que a API está em execução.
+  Solução:
+  - Encerrar a API com Ctrl C
+  - Ou finalizar o processo MonitoramentoArquivos.Api
+  - Executar dotnet build novamente
+ 
+  ## Diagrama de Fluxo (Visão Técnica)
 
+  ```bash
+  ┌──────────────┐
+  │ Adquirente   │
+  │ (Uf/Fagammon)│
+  └──────┬───────┘
+         │
+         ▼
+  ┌──────────────────────┐
+  │ storage/inbox        │
+  └────────┬─────────────┘
+           │
+           ▼
+  ┌────────────────────────────┐
+  │ FolderMonitorHostedService │
+  │ (Worker / Background)      │
+  └────────┬───────────────────┘
+           │
+           ▼
+  ┌────────────────────────────┐
+  │ FileReceiptIngestionService│
+  │ - Validação mínima         │
+  │ - Parser fixed-width       │
+  │ - Geração de hash          │
+  └────────┬───────────────────┘
+           │
+           ▼
+  ┌────────────────────────────┐
+  │ Banco de Dados             │
+  │ FileReceipts               │
+  └────────┬───────────────────┘
+     ├── Sucesso ──▶ storage/backup
+     └── Falha   ──▶ storage/rejected
+
+
+
+
+ 
+  
+
+
+
+
+
+
+
+
+
+ 
 
 
  
